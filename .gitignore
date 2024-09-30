@@ -1,0 +1,39 @@
+# Ignore build results
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# OSX files
+.DS_Store
+
+# Rider project files
+.idea/
+*.sln.iml
+
+# DotNet local db
+*.mdf
+*.ldf
+
+# Visual Studio Code settings
+.vscode/
+
+# NuGet packages
