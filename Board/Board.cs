@@ -17,5 +17,11 @@ namespace Board
     {
       return pieces[line, column];
     }
+
+    public void setPositionPiece(Piece piece, Position position)
+    {
+      pieces[position.line, position.column] = piece;
+      piece.position = position;
+    }
   }
 }

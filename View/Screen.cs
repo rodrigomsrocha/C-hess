@@ -4,7 +4,8 @@ namespace View
 {
   class Screen
   {
-    public static void printBoard(ChessBoard board) {
+    public static void printBoard(ChessBoard board)
+    {
       for (int i = 0; i < board.line; i++)
       {
         for (int j = 0; j < board.column; j++)
@@ -13,7 +14,10 @@ namespace View
           {
             Console.Write("- ");
           }
-          Console.Write(board.getPositionPiece(i, j) + " ");
+          else
+          {
+            Console.Write(board.getPositionPiece(i, j) + " ");
+          }
         }
         Console.WriteLine();
       }
