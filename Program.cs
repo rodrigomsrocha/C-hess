@@ -1,4 +1,5 @@
 ﻿using Board;
+using View;
 
 namespace Chess
 {
@@ -6,9 +7,8 @@ namespace Chess
   {
     public static void Main(string[] args)
     {
-      Position t = new Position(3, 4);
-
-      Console.WriteLine("Posição: " + t);
+      ChessBoard board = new ChessBoard(8, 8);
+      Screen.printBoard(board);
     }
   }
 }
