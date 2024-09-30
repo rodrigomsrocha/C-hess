@@ -2,7 +2,7 @@ using Board.Enums;
 
 namespace Board
 {
-  class Piece
+  abstract class Piece
   {
     public Position position { get; set; }
     public Color color { get; protected set; }
@@ -21,5 +21,7 @@ namespace Board
     {
       movements++;
     }
+
+    public abstract bool[,] possibleMovements();
   }
 }
