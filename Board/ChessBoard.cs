@@ -24,12 +24,22 @@ namespace Board
 
     public void setPositionPiece(Piece piece, Position position)
     {
-      if(pieceExists(position))
+      if (pieceExists(position))
       {
         throw new BoardException("There is already a piece in that position");
       }
       pieces[position.line, position.column] = piece;
       piece.position = position;
+    }
+
+    public Piece removePiece(Position position)
+    {
+      if (getPositionPiece(position) == null) return null;
+      Piece aux = getPositionPiece(position);
+      aux.position = null;
+      pieces[position.line, position.column] = null;
+
+      return aux;
     }
 
     public bool pieceExists(Position position)

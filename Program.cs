@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using Board.Enums;
 using Board;
 using View;
 
@@ -8,12 +8,22 @@ namespace Chess
   {
     public static void Main(string[] args)
     {
-      ChessBoard board = new ChessBoard(8, 8);
-      board.setPositionPiece(new King(board, Color.Black), new Position(1, 2));
-      board.setPositionPiece(new Tower(board, Color.White), new Position(2, 2));
-      board.setPositionPiece(new Tower(board, Color.White), new Position(1, 5));
+      ChessMatch match = new ChessMatch();
 
-      Screen.printBoard(board);
+      while (!match.over)
+      {
+        Console.Clear();
+        Screen.printBoard(match.board);
+
+        Console.WriteLine();
+        Console.Write("Origem: ");
+        Position origin = Screen.readChessPosition().toPosition();
+
+        Console.Write("Destino: ");
+        Position destination = Screen.readChessPosition().toPosition();
+
+        match.executeMovement(origin, destination);
+      }
     }
   }
 }

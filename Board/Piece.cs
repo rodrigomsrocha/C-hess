@@ -1,4 +1,4 @@
-using System.Drawing;
+using Board.Enums;
 
 namespace Board
 {
@@ -15,6 +15,11 @@ namespace Board
       this.board = board;
       this.color = color;
       this.movements = 0;
+    }
+
+    public void incrementMovements()
+    {
+      movements++;
     }
   }
 }

@@ -1,5 +1,6 @@
-using System.Drawing;
+using Board.Enums;
 using Board;
+using Chess;
 
 namespace View
 {
@@ -40,6 +41,14 @@ namespace View
         Console.Write(piece);
         Console.ForegroundColor = aux;
       }
+    }
+
+    public static PositionChess readChessPosition()
+    {
+      string postionString = Console.ReadLine() ?? "";
+      char column = postionString[0];
+      int line = int.Parse(postionString[1] + "");
+      return new PositionChess(column, line);
     }
   }
 }
