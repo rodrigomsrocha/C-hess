@@ -1,6 +1,7 @@
 ﻿using Board.Enums;
 using Board;
 using View;
+using System.Security;
 
 namespace Chess
 {
@@ -8,27 +9,49 @@ namespace Chess
   {
     public static void Main(string[] args)
     {
-      ChessMatch match = new ChessMatch();
 
-      while (!match.over)
+      try
       {
-        Console.Clear();
-        Screen.printBoard(match.board);
+        ChessMatch match = new ChessMatch();
+        while (!match.over)
+        {
+          try
+          {
+            Console.Clear();
+            Screen.printBoard(match.board);
+            Console.WriteLine();
+            Console.WriteLine("Turno: " + match.turn);
+            Console.WriteLine("Agaurdando jogada: " + match.currentPlayer);
 
-        Console.WriteLine();
-        Console.Write("Origem: ");
-        Position origin = Screen.readChessPosition().toPosition();
+            Console.WriteLine();
+            Console.Write("Origem: ");
+            Position origin = Screen.readChessPosition().toPosition();
+            match.validateOriginPosition(origin);
 
-        bool [,] possibleMovements = match.board.getPositionPiece(origin).possibleMovements();
-        Console.Clear();
-        Screen.printBoard(match.board, possibleMovements);
-        Console.WriteLine();
+            bool[,] possibleMovements = match.board.getPositionPiece(origin).possibleMovements();
+            Console.Clear();
+            Screen.printBoard(match.board, possibleMovements);
+            Console.WriteLine();
 
-        Console.Write("Destino: ");
-        Position destination = Screen.readChessPosition().toPosition();
+            Console.Write("Destino: ");
+            Position destination = Screen.readChessPosition().toPosition();
+            match.validateDestinationPosition(origin, destination);
 
-        match.executeMovement(origin, destination);
+            match.executePlay(origin, destination);
+          }
+          catch (BoardException e)
+          {
+            Console.WriteLine(e.Message);
+            Console.ReadLine();
+          }
+        }
       }
+      catch (BoardException e)
+      {
+        Console.WriteLine(e.Message);
+      }
+
+      Console.ReadLine();
     }
   }
 }
