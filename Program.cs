@@ -8,9 +8,12 @@ namespace Chess
   {
     public static void Main(string[] args)
     {
-      PositionChess positionChess = new PositionChess('a', 1);
-      Console.WriteLine(positionChess);
-      Console.WriteLine(positionChess.toPosition());
+      ChessBoard board = new ChessBoard(8, 8);
+      board.setPositionPiece(new King(board, Color.Black), new Position(1, 2));
+      board.setPositionPiece(new Tower(board, Color.White), new Position(2, 2));
+      board.setPositionPiece(new Tower(board, Color.White), new Position(1, 5));
+
+      Screen.printBoard(board);
     }
   }
 }
