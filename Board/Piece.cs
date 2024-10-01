@@ -27,7 +27,7 @@ namespace Board
             movements--;
         }
 
-        public bool canMoveTo(Position destination)
+        public bool isAPossibleMovement(Position destination)
         {
             return possibleMovements()[destination.line, destination.column];
         }

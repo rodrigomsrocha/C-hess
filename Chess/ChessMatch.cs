@@ -45,7 +45,7 @@ namespace Chess
 
         public void validateDestinationPosition(Position origin, Position destination)
         {
-            if (!board.getPositionPiece(origin).canMoveTo(destination))
+            if (!board.getPositionPiece(origin).isAPossibleMovement(destination))
             {
                 throw new BoardException("You can not carry out this movement");
             }
