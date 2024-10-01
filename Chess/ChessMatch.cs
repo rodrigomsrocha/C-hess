@@ -228,12 +228,32 @@ namespace Chess
 
         private void setupPieces()
         {
-            setupNewPiece('c', 1, new Tower(board, Color.White));
-            setupNewPiece('d', 1, new King(board, Color.White));
-            setupNewPiece('h', 7, new Tower(board, Color.White));
+            setupNewPiece('a', 1, new Tower(board, Color.White));
+            setupNewPiece('b', 1, new Horse(board, Color.White));
+            setupNewPiece('c', 1, new Bishop(board, Color.White));
+            setupNewPiece('d', 1, new Queen(board, Color.White));
+            setupNewPiece('e', 1, new King(board, Color.White));
+            setupNewPiece('f', 1, new Bishop(board, Color.White));
+            setupNewPiece('g', 1, new Horse(board, Color.White));
+            setupNewPiece('h', 1, new Tower(board, Color.White));
+            for (int i = 0; i < board.column; i++)
+            {
+                setupNewPiece((char)('a' + i), 2, new Pawn(board, Color.White));
+            }
 
-            setupNewPiece('a', 8, new King(board, Color.Black));
-            setupNewPiece('b', 8, new Tower(board, Color.Black));
+            setupNewPiece('a', 8, new Tower(board, Color.Black));
+            setupNewPiece('b', 8, new Horse(board, Color.Black));
+            setupNewPiece('c', 8, new Bishop(board, Color.Black));
+            setupNewPiece('d', 8, new Queen(board, Color.Black));
+            setupNewPiece('e', 8, new King(board, Color.Black));
+            setupNewPiece('f', 8, new Bishop(board, Color.Black));
+            setupNewPiece('g', 8, new Horse(board, Color.Black));
+            setupNewPiece('h', 8, new Tower(board, Color.Black));
+            for (int i = 0; i < board.column; i++)
+            {
+                setupNewPiece((char)('a' + i), 7, new Pawn(board, Color.Black));
+            }
+            // black pawns
         }
     }
 }
