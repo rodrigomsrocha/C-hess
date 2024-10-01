@@ -82,8 +82,16 @@ namespace Chess
                 inCheck = false;
             }
 
-            turn++;
-            changePlayer();
+            if (isKingInCheckmate(adversary(currentPlayer)))
+            {
+                over = true;
+            }
+            else
+            {
+                turn++;
+                changePlayer();
+            }
+
         }
 
         public Piece executeMovement(Position origin, Position destination)
@@ -180,6 +188,38 @@ namespace Chess
             return false;
         }
 
+        public bool isKingInCheckmate(Color color)
+        {
+            if (!isKingInCheck(color))
+            {
+                return false;
+            }
+
+            foreach (Piece piece in piecesInGame(color))
+            {
+                bool[,] currentPlayerPossibleMovements = piece.possibleMovements();
+                for (int i = 0; i < board.line; i++)
+                {
+                    for (int j = 0; j < board.column; j++)
+                    {
+                        if (currentPlayerPossibleMovements[i, j])
+                        {
+                            Position origin = piece.position;
+                            Position destination = new Position(i, j);
+                            Piece capturedPiece = executeMovement(origin, destination);
+                            bool stillInCheck = isKingInCheck(color);
+                            unmakePlay(origin, destination, capturedPiece);
+                            if (!stillInCheck)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         public void setupNewPiece(char column, int line, Piece piece)
         {
             board.setPositionPiece(piece, new PositionChess(column, line).toPosition());
@@ -190,17 +230,10 @@ namespace Chess
         {
             setupNewPiece('c', 1, new Tower(board, Color.White));
             setupNewPiece('d', 1, new King(board, Color.White));
-            setupNewPiece('e', 1, new Tower(board, Color.White));
-            setupNewPiece('c', 2, new Tower(board, Color.White));
-            setupNewPiece('d', 2, new Tower(board, Color.White));
-            setupNewPiece('e', 2, new Tower(board, Color.White));
+            setupNewPiece('h', 7, new Tower(board, Color.White));
 
-            setupNewPiece('c', 8, new Tower(board, Color.Black));
-            setupNewPiece('d', 8, new King(board, Color.Black));
-            setupNewPiece('e', 8, new Tower(board, Color.Black));
-            setupNewPiece('c', 7, new Tower(board, Color.Black));
-            setupNewPiece('d', 7, new Tower(board, Color.Black));
-            setupNewPiece('e', 7, new Tower(board, Color.Black));
+            setupNewPiece('a', 8, new King(board, Color.Black));
+            setupNewPiece('b', 8, new Tower(board, Color.Black));
         }
     }
 }

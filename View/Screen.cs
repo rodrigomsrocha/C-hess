@@ -13,10 +13,18 @@ namespace View
             Console.WriteLine();
             printCapturedPieces(match);
             Console.WriteLine("Turno: " + match.turn);
-            Console.WriteLine("Agaurdando jogada: " + match.currentPlayer);
-            if (match.inCheck)
+            if (!match.over)
             {
-                Console.WriteLine("XEQUE!");
+                Console.WriteLine("Agaurdando jogada: " + match.currentPlayer);
+                if (match.inCheck)
+                {
+                    Console.WriteLine("XEQUE!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("XEQUEMATE!");
+                Console.WriteLine("Vencedor: " + match.currentPlayer);
             }
         }
 
