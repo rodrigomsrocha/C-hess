@@ -14,6 +14,10 @@ namespace View
             printCapturedPieces(match);
             Console.WriteLine("Turno: " + match.turn);
             Console.WriteLine("Agaurdando jogada: " + match.currentPlayer);
+            if (match.inCheck)
+            {
+                Console.WriteLine("XEQUE!");
+            }
         }
 
         public static void printCapturedPieces(ChessMatch match)

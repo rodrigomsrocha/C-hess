@@ -9,6 +9,7 @@ namespace Chess
         public int turn { get; private set; }
         public Color currentPlayer { get; private set; }
         public bool over { get; private set; }
+        public bool inCheck { get; private set; }
         private HashSet<Piece> pieces;
         private HashSet<Piece> captured;
 
@@ -50,14 +51,42 @@ namespace Chess
             }
         }
 
+        public void unmakePlay(Position origin, Position destination, Piece capturedPiece)
+        {
+            Piece piece = board.removePiece(destination);
+            piece.decrementMovements();
+            if (capturedPiece != null)
+            {
+                board.setPositionPiece(capturedPiece, destination);
+                captured.Remove(capturedPiece);
+            }
+            board.setPositionPiece(piece, origin);
+        }
+
         public void executePlay(Position origin, Position destination)
         {
-            executeMovement(origin, destination);
+            Piece capturedPiece = executeMovement(origin, destination);
+
+            if (isKingInCheck(currentPlayer))
+            {
+                unmakePlay(origin, destination, capturedPiece);
+                throw new BoardException("You cannot put yourself in check");
+            }
+
+            if (isKingInCheck(adversary(currentPlayer)))
+            {
+                inCheck = true;
+            }
+            else
+            {
+                inCheck = false;
+            }
+
             turn++;
             changePlayer();
         }
 
-        public void executeMovement(Position origin, Position destination)
+        public Piece executeMovement(Position origin, Position destination)
         {
             Piece piece = board.removePiece(origin);
             piece.incrementMovements();
@@ -67,6 +96,8 @@ namespace Chess
             {
                 captured.Add(capturedPiece);
             }
+
+            return capturedPiece;
         }
 
         private void changePlayer()
@@ -108,6 +139,45 @@ namespace Chess
 
             aux.ExceptWith(capturedPieces(color));
             return aux;
+        }
+
+        private Color adversary(Color color)
+        {
+            if (color == Color.White)
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+
+        private Piece getKing(Color color)
+        {
+            foreach (Piece piece in piecesInGame(color))
+            {
+                if (piece is King)
+                {
+                    return piece;
+                }
+            }
+
+            return null;
+        }
+
+        public bool isKingInCheck(Color color)
+        {
+            Piece king = getKing(color);
+            foreach (Piece piece in piecesInGame(adversary(color)))
+            {
+                bool[,] adversaryPossibleMovements = piece.possibleMovements();
+                if (adversaryPossibleMovements[king.position.line, king.position.column] == true)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void setupNewPiece(char column, int line, Piece piece)
