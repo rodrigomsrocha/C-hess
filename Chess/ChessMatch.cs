@@ -61,6 +61,26 @@ namespace Chess
                 captured.Remove(capturedPiece);
             }
             board.setPositionPiece(piece, origin);
+
+            // speial play - small rock
+            if (piece is King && destination.column == origin.column + 2)
+            {
+                Position towerOrigin = new Position(origin.line, origin.column + 3);
+                Position towerDestination = new Position(origin.line, origin.column + 1);
+                Piece tower = board.removePiece(towerDestination);
+                tower.decrementMovements();
+                board.setPositionPiece(tower, towerOrigin);
+            }
+
+            // speial play - big rock
+            if (piece is King && destination.column == origin.column - 2)
+            {
+                Position towerOrigin = new Position(origin.line, origin.column - 4);
+                Position towerDestination = new Position(origin.line, origin.column - 1);
+                Piece tower = board.removePiece(towerDestination);
+                tower.decrementMovements();
+                board.setPositionPiece(tower, towerOrigin);
+            }
         }
 
         public void executePlay(Position origin, Position destination)
@@ -103,6 +123,26 @@ namespace Chess
             if (capturedPiece != null)
             {
                 captured.Add(capturedPiece);
+            }
+
+            // speial play - small rock
+            if (piece is King && destination.column == origin.column + 2)
+            {
+                Position towerOrigin = new Position(origin.line, origin.column + 3);
+                Position towerDestination = new Position(origin.line, origin.column + 1);
+                Piece tower = board.removePiece(towerOrigin);
+                tower.incrementMovements();
+                board.setPositionPiece(tower, towerDestination);
+            }
+
+            // speial play - big rock
+            if (piece is King && destination.column == origin.column - 2)
+            {
+                Position towerOrigin = new Position(origin.line, origin.column - 4);
+                Position towerDestination = new Position(origin.line, origin.column - 1);
+                Piece tower = board.removePiece(towerOrigin);
+                tower.incrementMovements();
+                board.setPositionPiece(tower, towerDestination);
             }
 
             return capturedPiece;
@@ -232,7 +272,7 @@ namespace Chess
             setupNewPiece('b', 1, new Horse(board, Color.White));
             setupNewPiece('c', 1, new Bishop(board, Color.White));
             setupNewPiece('d', 1, new Queen(board, Color.White));
-            setupNewPiece('e', 1, new King(board, Color.White));
+            setupNewPiece('e', 1, new King(board, Color.White, this));
             setupNewPiece('f', 1, new Bishop(board, Color.White));
             setupNewPiece('g', 1, new Horse(board, Color.White));
             setupNewPiece('h', 1, new Tower(board, Color.White));
@@ -245,7 +285,7 @@ namespace Chess
             setupNewPiece('b', 8, new Horse(board, Color.Black));
             setupNewPiece('c', 8, new Bishop(board, Color.Black));
             setupNewPiece('d', 8, new Queen(board, Color.Black));
-            setupNewPiece('e', 8, new King(board, Color.Black));
+            setupNewPiece('e', 8, new King(board, Color.Black, this));
             setupNewPiece('f', 8, new Bishop(board, Color.Black));
             setupNewPiece('g', 8, new Horse(board, Color.Black));
             setupNewPiece('h', 8, new Tower(board, Color.Black));
@@ -253,7 +293,6 @@ namespace Chess
             {
                 setupNewPiece((char)('a' + i), 7, new Pawn(board, Color.Black));
             }
-            // black pawns
         }
     }
 }
