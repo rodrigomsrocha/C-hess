@@ -12,6 +12,7 @@ namespace Chess
         public bool inCheck { get; private set; }
         private HashSet<Piece> pieces;
         private HashSet<Piece> captured;
+        public Piece vunerableToEnPassant { get; private set; }
 
         public ChessMatch()
         {
@@ -19,6 +20,8 @@ namespace Chess
             turn = 1;
             currentPlayer = Color.White;
             over = false;
+            inCheck = false;
+            vunerableToEnPassant = null;
             pieces = new HashSet<Piece>();
             captured = new HashSet<Piece>();
             setupPieces();
@@ -81,6 +84,26 @@ namespace Chess
                 tower.decrementMovements();
                 board.setPositionPiece(tower, towerOrigin);
             }
+
+            // special play - en passant
+            if (piece is Pawn)
+            {
+                if (origin.column != destination.column && capturedPiece == vunerableToEnPassant)
+                {
+                    Piece pawn = board.removePiece(destination);
+                    Position pawnPosition;
+                    if (piece.color == Color.White)
+                    {
+                        pawnPosition = new Position(3, destination.column);
+                    }
+                    else
+                    {
+                        pawnPosition = new Position(4, destination.column);
+                    }
+
+                    board.setPositionPiece(pawn, pawnPosition);
+                }
+            }
         }
 
         public void executePlay(Position origin, Position destination)
@@ -112,6 +135,15 @@ namespace Chess
                 changePlayer();
             }
 
+            Piece piece = board.getPositionPiece(destination);
+
+            // special play - en passant
+            if (piece is Pawn
+              && (destination.line == origin.line - 2
+                || destination.line == origin.line + 2))
+            {
+                vunerableToEnPassant = piece;
+            }
         }
 
         public Piece executeMovement(Position origin, Position destination)
@@ -143,6 +175,25 @@ namespace Chess
                 Piece tower = board.removePiece(towerOrigin);
                 tower.incrementMovements();
                 board.setPositionPiece(tower, towerDestination);
+            }
+
+            // special play - en passant
+            if (piece is Pawn)
+            {
+                if (origin.column != destination.column && capturedPiece == null)
+                {
+                    Position pawnPosition;
+                    if (piece.color == Color.White)
+                    {
+                        pawnPosition = new Position(destination.line + 1, destination.column);
+                    }
+                    else
+                    {
+                        pawnPosition = new Position(destination.line - 1, destination.column);
+                    }
+                    capturedPiece = board.removePiece(pawnPosition);
+                    captured.Add(capturedPiece);
+                }
             }
 
             return capturedPiece;
@@ -278,7 +329,7 @@ namespace Chess
             setupNewPiece('h', 1, new Tower(board, Color.White));
             for (int i = 0; i < board.column; i++)
             {
-                setupNewPiece((char)('a' + i), 2, new Pawn(board, Color.White));
+                setupNewPiece((char)('a' + i), 2, new Pawn(board, Color.White, this));
             }
 
             setupNewPiece('a', 8, new Tower(board, Color.Black));
@@ -291,7 +342,7 @@ namespace Chess
             setupNewPiece('h', 8, new Tower(board, Color.Black));
             for (int i = 0; i < board.column; i++)
             {
-                setupNewPiece((char)('a' + i), 7, new Pawn(board, Color.Black));
+                setupNewPiece((char)('a' + i), 7, new Pawn(board, Color.Black, this));
             }
         }
     }

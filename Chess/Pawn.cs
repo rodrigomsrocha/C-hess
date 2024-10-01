@@ -5,9 +5,11 @@ namespace Chess
 {
     class Pawn : Piece
     {
-        public Pawn(ChessBoard board, Color color)
+        private ChessMatch match;
+        public Pawn(ChessBoard board, Color color, ChessMatch match)
           : base(board, color)
         {
+            this.match = match;
         }
 
         private bool isThereEnemy(Position position)
@@ -54,15 +56,20 @@ namespace Chess
                 // #jogadaespecial en passant
                 if (this.position.line == 3)
                 {
-                    Position esquerda = new Position(this.position.line, this.position.column - 1);
-                    if (board.isPostionValid(esquerda) && isThereEnemy(esquerda))
+                    Position leftPosition = new Position(this.position.line, this.position.column - 1);
+                    if (
+                      board.isPostionValid(leftPosition)
+                      && isThereEnemy(leftPosition)
+                      && board.getPositionPiece(leftPosition) == match.vunerableToEnPassant)
                     {
-                        boolBoard[esquerda.line - 1, esquerda.column] = true;
+                        boolBoard[leftPosition.line - 1, leftPosition.column] = true;
                     }
-                    Position direita = new Position(this.position.line, this.position.column + 1);
-                    if (board.isPostionValid(direita) && isThereEnemy(direita))
+                    Position rightPosition = new Position(this.position.line, this.position.column + 1);
+                    if (board.isPostionValid(rightPosition)
+                      && isThereEnemy(rightPosition)
+                      && board.getPositionPiece(rightPosition) == match.vunerableToEnPassant)
                     {
-                        boolBoard[direita.line - 1, direita.column] = true;
+                        boolBoard[rightPosition.line - 1, rightPosition.column] = true;
                     }
                 }
             }
@@ -93,15 +100,19 @@ namespace Chess
                 // #jogadaespecial en passant
                 if (this.position.line == 4)
                 {
-                    Position esquerda = new Position(this.position.line, this.position.column - 1);
-                    if (board.isPostionValid(esquerda) && isThereEnemy(esquerda))
+                    Position leftPosition = new Position(this.position.line, this.position.column - 1);
+                    if (board.isPostionValid(leftPosition)
+                      && isThereEnemy(leftPosition)
+                      && board.getPositionPiece(leftPosition) == match.vunerableToEnPassant)
                     {
-                        boolBoard[esquerda.line + 1, esquerda.column] = true;
+                        boolBoard[leftPosition.line + 1, leftPosition.column] = true;
                     }
-                    Position direita = new Position(this.position.line, this.position.column + 1);
-                    if (board.isPostionValid(direita) && isThereEnemy(direita))
+                    Position rightPosition = new Position(this.position.line, this.position.column + 1);
+                    if (board.isPostionValid(rightPosition)
+                      && isThereEnemy(rightPosition)
+                      && board.getPositionPiece(rightPosition) == match.vunerableToEnPassant)
                     {
-                        boolBoard[direita.line + 1, direita.column] = true;
+                        boolBoard[rightPosition.line + 1, rightPosition.column] = true;
                     }
                 }
             }
